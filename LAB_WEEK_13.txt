@@ -1,0 +1,21 @@
+Rifqi Aldino Amin (00000093743)
+
+1. Why is MVVM important? Which files represent Model, which files represent View, and which files represent ViewModel? 
+MVVM bertanggung jawab untuk UI (View), logic (Model), dan menyediakan lapisan perantara (ViewModel) untuk menghubungkan keduanya tanpa saling bergantung secara langsung. MVVM memiliki keuntungan seperti berikut:
+- Mempermudah desain ulang UI tanpa mengubah logic.
+- Mempermudah testing unit pada ViewModel karena MVVM memisahkan logic dengan UI.
+File Movie.kt mengimplementasi Model dengan data class Movie dan dengan @ENTITY untuk room.
+File activity_main.xml mengimplementasi View sebagai layout Utama termasuk RecyclerView dan juga MainActivity.kt sebagai activity yang menampilkan UI dan mengikat binding.
+File MovieViewModel.kt mengimplementasi ViewModel sebagai class yang menyediakan popularMovies dan menangani pengambilan data.
+
+2. In Part 1, you implemented Data Binding, why is this more efficient than using the normal method? 
+Karena memungkinkan proses binding data antara View dan ViewModel dilakukan secara otomatis tanpa memanggil findViewById. Dengan Data Binding, UI akan langsung diperbarui pada saat data dalam ViewModel berubah, terutama Ketika menggunakan LiveData. Data Binding juga mendukung pembuatan BindingAdapter untuk memudahkan pengaturan khusus pada komponen seperti RecyclerView. Mekanisme ini membuat kode lebih mudah dipelihara, lebih bersih, dan mengurangi potensi bug dalam sinkronisasi data dan UI.
+
+3. In Part 2, you implemented the Singleton Pattern, why is this important?
+Karena database hanya boleh memiliki satu instance pada saat aplikasi dijalankan. Membuat banyak instance database hanya akan membuat konflik data, pemborosan memori, serta risiko race condition Ketika beberapa thread mengakses database secara bersamaan. Dengan Singleton, aplikasi memastikan bahwa akses database akan tetap konsisten dan efisien. Hal ini penting karena untuk membuat instance Room Database membutuhkan sumber daya yang besar, sehingga penggunaan satu instance menjadi pilihan Utama.
+ 
+4. In Part 2 & 3, you implemented the Repository Pattern, why is this important? 
+Karena dapat menjadi lapisan yang memisahkan ViewModel dari teknis sumber data, baik data dari API maupun database local. Dengan repository, ViewModel tidak perlu mengetahui apakah data berasal dari jaringan atau cache. Repository yang akan menangani pengambilan dan penyimpanannya. Repository juga bertanggung jawab melakukan caching, mengeksekusi logic pengambilan data baru, penanganan error, dan mengurangi duplikasi kode. Repository pattern membuat struktur kode aplikasi lebih terstruktur, mudah dikontrol, dan mengikuti prinsip single responsibility.
+
+5. In part 3, you implemented the Worker Manager, is there another way to refresh your database with the latest data other than using Worker?
+Terdapat cara lain untuk refresh data di database. Pertama, aplikasi dapat menerapkan metode manual refresh seperti pull-to-refresh yang memungkinkan pengguna untuk refresh data secara langsung. Kedua, refresh dapat dilakukan melalui push notification dengan menerapkan FCM (Firebase Cloud Messaging), dimana server memberi sinyal bahwa data baru tersedia sehingga aplikasi dapat melakukan sinkronisasi secara otomatis. Terakhir, dengan menggunakan API lama seperti JobScheduler atau AlarmManager untuk menjadwalkan refresh secara berkala, meskipun kurang efisien dan tidak sebaik WorkerManager. Dibandingkan seluruh pilihan, WorkerManager tetap menjad pilihan terbaik untuk pekerjaan background yang terjadwal karena lebih stabil, efisien, dan mendukung berbagai kondisi system android.
