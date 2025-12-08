@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation (libs.androidx.work.runtime)
     kapt (libs.androidx.room.compiler)
     kapt(libs.moshi.kotlin.codegen)
     implementation(libs.moshi.kotlin)

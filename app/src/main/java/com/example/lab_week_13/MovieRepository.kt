@@ -1,5 +1,6 @@
 package com.example.lab_week_13
 
+import android.util.Log
 import com.example.lab_week_13.api.MovieService
 import com.example.lab_week_13.database.MovieDao
 import com.example.lab_week_13.database.MovieDatabase
@@ -10,8 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class MovieRepository(private val movieService: MovieService,
-                      private val movieDatabase: MovieDatabase
-) {
+                      private val movieDatabase: MovieDatabase) {
     private val apiKey = "3eb1d95488ec7be2ff7b7a0c0a92f0f1"
 
     fun fetchMovies(): Flow<List<Movie>> {
@@ -35,4 +35,19 @@ class MovieRepository(private val movieService: MovieService,
         }.flowOn(Dispatchers.IO)
     }
 
+    // fetch movies from the API and save them to the database
+    // this function is used at an interval to refresh the list of popular movies
+    suspend fun fetchMoviesFromNetwork() {
+        val movieDao: MovieDao = movieDatabase.movieDao()
+        try {
+            val popularMovies = movieService.getPopularMovies(apiKey)
+            val moviesFetched = popularMovies.results
+            movieDao.addMovies(moviesFetched)
+        } catch (exception: Exception) {
+            Log.d(
+                "MovieRepository",
+                "An error occurred: ${exception.message}"
+            )
+        }
+    }
 }
